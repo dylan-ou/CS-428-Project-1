@@ -32,7 +32,7 @@ public class temperatureScript : MonoBehaviour
             string currentTemp = tempMatch.Groups[0].Value;
             string currentHumid = humidMatch.Groups[0].Value;
             temperatureText.SetText(currentTemp.Substring(7) + " F");
-            humidityText.SetText(currentHumid.Substring(11));
+            humidityText.SetText(currentHumid.Substring(11) + "%");
         }
     }
 }
