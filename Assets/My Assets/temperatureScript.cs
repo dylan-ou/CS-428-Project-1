@@ -10,10 +10,11 @@ public class temperatureScript : MonoBehaviour
     public TextMeshPro temperatureText;
     public TextMeshPro humidityText;
 
-    Regex temp = new Regex("\"temp\":[0-9]{2}");
+    Regex temp = new Regex("\"temp\":[0-9]+");
     Regex humidity = new Regex("\"humidity\":[0-9]{2}");
 
-    string webText;
+    string webText = "";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,8 +32,8 @@ public class temperatureScript : MonoBehaviour
 
             string currentTemp = tempMatch.Groups[0].Value;
             string currentHumid = humidMatch.Groups[0].Value;
-            temperatureText.SetText(currentTemp.Substring(7) + " F");
-            humidityText.SetText(currentHumid.Substring(11) + "%");
+            temperatureText.SetText("Temperature: " + currentTemp.Substring(7) + " F");
+            humidityText.SetText("Humidity: " + currentHumid.Substring(11) + "%");
         }
     }
 }

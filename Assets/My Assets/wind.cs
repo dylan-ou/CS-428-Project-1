@@ -34,6 +34,7 @@ public class wind : MonoBehaviour
 
             string s = speed.Groups[0].Value.Substring(8);
             string d = dir.Groups[0].Value.Substring(6);
+            float finalSpeed = float.Parse(s);
             float finalRotation = float.Parse(d);
 
             if(337.5f < finalRotation && finalRotation < 22.5f)
@@ -68,7 +69,7 @@ public class wind : MonoBehaviour
                 text.SetText(s + " mph NW");
             }
 
-
+            this.gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f + (0.05f * finalSpeed));
             this.gameObject.transform.rotation = Quaternion.Euler(0f, finalRotation, 0f);
         }
     }
