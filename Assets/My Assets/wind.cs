@@ -7,7 +7,7 @@ using TMPro;
 public class wind : MonoBehaviour
 {
     public WeatherAPI api;
-    public TextMeshPro text;
+    public TextMeshPro windText;
     [Range(0.0f, 360f)]
     public float rotation = 0.0f;
     
@@ -16,6 +16,7 @@ public class wind : MonoBehaviour
     Regex windSpeed = new Regex("\"speed\":[0-9]+.[0-9]+");
 
     string webText;
+    string direction = "N";
 
     // Start is called before the first frame update
     void Start()
@@ -34,41 +35,46 @@ public class wind : MonoBehaviour
 
             string s = speed.Groups[0].Value.Substring(8);
             string d = dir.Groups[0].Value.Substring(6);
+            //Debug.Log("Speed: " + s);
+            //Debug.Log("Direction: " + d);
             float finalSpeed = float.Parse(s);
             float finalRotation = float.Parse(d);
 
-            if(337.5f < finalRotation && finalRotation < 22.5f)
+            if (337.5f < finalRotation && finalRotation < 22.5f)
             {
-                text.SetText(s + " mph N");
+                direction = "N";
             } else if(22.5f < finalRotation && finalRotation < 67.5f)
             {
-                text.SetText(s + " mph NE");
+                direction = "NE";
             }
             else if (67.5f < finalRotation &&finalRotation < 112.5f)
             {
-                text.SetText(s + " mph E");
+                direction = "E";
             }
             else if (112.5f < finalRotation && finalRotation < 157.5f)
             {
-                text.SetText(s + " mph SE");
+                direction = "SE";
             }
             else if (157.5f < finalRotation && finalRotation < 202.5f)
             {
-                text.SetText(s + " mph S");
+                direction = "S";
             }
             else if (202.5f < finalRotation && finalRotation < 247.5f)
             {
-                text.SetText(s + " mph SW");
+                direction = "SW";
             }
             else if (247.5f < finalRotation && finalRotation < 292.5f)
             {
-                text.SetText(s + " mph W");
+                direction = "W";
             }
             else if (292.5f < finalRotation && finalRotation < 337.5f)
             {
-                text.SetText(s + " mph NW");
+                direction = "NW";
             }
 
+            
+            windText.SetText(s + " mph " + direction);
+            
             this.gameObject.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f + (0.05f * finalSpeed));
             this.gameObject.transform.rotation = Quaternion.Euler(0f, finalRotation, 0f);
         }
