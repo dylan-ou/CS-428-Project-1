@@ -14,6 +14,7 @@ public class weatherScript : MonoBehaviour
     public TextMeshPro text;
     public GameObject[] weatherObjects;
     public AudioClip[] audioClips;
+    public GameObject[] particles;
 
     //Regex condition = new Regex("(clear sky)|(few clouds)|(scattered clouds)|(broken clouds)|(shower rain)|(rain)|(thunderstorm)|(snow)|(mist)");
     Regex condition2 = new Regex("\"id\":[0-9]{3}");
@@ -36,6 +37,10 @@ public class weatherScript : MonoBehaviour
         for(int i = 0; i < weatherObjects.Length; i++)
         {
             weatherObjects[i].SetActive(false);
+        }
+        for(int i = 0; i < particles.Length; i++)
+        {
+            particles[i].SetActive(false);
         }
     }
 
@@ -150,7 +155,33 @@ public class weatherScript : MonoBehaviour
             }
 
             text.SetText(listOfConditions[currentCase]);
-            if(audioSource.clip == null)
+
+            if(currentCase == 5)
+            {
+                particles[0].SetActive(true);
+                particles[1].SetActive(false);
+                particles[2].SetActive(false);
+            }
+            else if (currentCase == 7)
+            {
+                particles[0].SetActive(false);
+                particles[1].SetActive(true);
+                particles[2].SetActive(false);
+            }
+            else if (currentCase == 8)
+            {
+                particles[0].SetActive(false);
+                particles[1].SetActive(false);
+                particles[2].SetActive(true);
+            }
+            else
+            {
+                particles[0].SetActive(false);
+                particles[1].SetActive(false);
+                particles[2].SetActive(false);
+            }
+
+            if (audioSource.clip == null)
             {
                 audioSource.clip = audioClips[currentCase];
             } else if (audioSource.clip != audioClips[currentCase])
