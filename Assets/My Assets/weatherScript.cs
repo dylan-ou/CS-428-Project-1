@@ -10,25 +10,29 @@ using UnityEngine;
 public class weatherScript : MonoBehaviour
 {
     public WeatherAPI api;
+    public AudioSource audioSource;
     public TextMeshPro text;
-    public GameObject[] weatherObjects = new GameObject[9];
+    public GameObject[] weatherObjects;
+    public AudioClip[] audioClips;
 
     //Regex condition = new Regex("(clear sky)|(few clouds)|(scattered clouds)|(broken clouds)|(shower rain)|(rain)|(thunderstorm)|(snow)|(mist)");
     Regex condition2 = new Regex("\"id\":[0-9]{3}");
+    Match weatherMatch;
+
     string currentCondition = "";
     string conditionID = "";
+    int currentCase = -1;
+    int idNum;
     string[] listOfConditions = { "clear sky", "few clouds", "scattered clouds", "broken clouds", "shower rain", "rain", "thunderstorm", "snow", "mist" };
 
     string webText = "";
-    Match weatherMatch;
-    int currentCase = -1;
-    int idNum;
-
+    
     public
     // Start is called before the first frame update
     void Start()
     {
         api = api.gameObject.GetComponent<WeatherAPI>();
+        audioSource = this.GetComponentInParent<AudioSource>();
         for(int i = 0; i < weatherObjects.Length; i++)
         {
             weatherObjects[i].SetActive(false);
@@ -64,6 +68,15 @@ public class weatherScript : MonoBehaviour
                 case 804:
                     currentCondition = "broken clouds";
                     break;
+                case 300:
+                case 301:
+                case 302:
+                case 310:
+                case 311:
+                case 312:
+                case 313:
+                case 314:
+                case 321:
                 case 520:
                 case 521:
                 case 522:
@@ -75,7 +88,6 @@ public class weatherScript : MonoBehaviour
                 case 502:
                 case 503:
                 case 504:
-                case 511:
                     currentCondition = "rain";
                     break;
                 case 200:
@@ -90,6 +102,7 @@ public class weatherScript : MonoBehaviour
                 case 232:
                     currentCondition = "thunderstorm";
                     break;
+                case 511:
                 case 600:
                 case 601:
                 case 602:
@@ -137,6 +150,18 @@ public class weatherScript : MonoBehaviour
             }
 
             text.SetText(listOfConditions[currentCase]);
+            if(audioSource.clip == null)
+            {
+                audioSource.clip = audioClips[currentCase];
+            } else if (audioSource.clip != audioClips[currentCase])
+            {
+                if (audioSource.isPlaying)
+                {
+                    audioSource.Stop();
+                    audioSource.clip = audioClips[currentCase];
+                    audioSource.Play();
+                }
+            }
 
             for (int i = 0; i < weatherObjects.Length; i++)
             {
